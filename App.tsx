@@ -105,22 +105,24 @@ export default function App() {
 
    
   useEffect(() => {
+    if(!carrega && localizacao){
     mapRef.current.animateToRegion(region, 2000);
+    }
   }, [region])
 
-    useEffect(() => {
-      (async() => {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if(status !== 'garanted'){
-          alert("Permissão Negada!");
-          setCarrega(false);
-          return;
-        }
-        let useLocal = 
-          await Location.getCurrentPositionAsync({});
-        setLocalizacao(userLocal.coords);
+  useEffect(() => {
+    (async() => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if(status !== 'granted'){
+        alert("Permissão Negada!");
         setCarrega(false);
-      })
+        return;
+      }
+      let userLocal = 
+        await Location.getCurrentPositionAsync({});
+      setLocalizacao(userLocal.coords);
+      setCarrega(false);
+    })
     mapRef.current.animateToRegion(region, 2000);
   }, [region])
 
